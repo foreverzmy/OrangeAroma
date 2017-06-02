@@ -1,0 +1,39 @@
+{
+  "name": "orangearoma",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./bin/index.ts",
+  "scripts": {
+    "prestart": "tsc",
+    "start": "node ./dist/bin/index",
+    "test": "./node_modules/.bin/mocha -r ./node_modules/ts-node/register lib/**/*.spec.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/bcryptjs": "^2.4.0",
+    "@types/debug": "^0.0.29",
+    "@types/jsonwebtoken": "^7.2.0",
+    "@types/koa": "^2.0.39",
+    "@types/koa-bodyparser": "^3.0.23",
+    "@types/koa-router": "^7.0.22",
+    "@types/mongoose": "^4.7.13",
+    "@types/mongoose-promise": "^4.5.5",
+    "bcryptjs": "^2.4.3",
+    "debug": "^2.6.6",
+    "jsonwebtoken": "^7.4.1",
+    "koa": "^2.0.0-alpha.8",
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.1.1",
+    "mongoose": "^4.10.4"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.0.0",
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^7.0.22",
+    "chai": "^4.0.1",
+    "mocha": "^3.4.2",
+    "ts-node": "^3.0.4",
+    "typescript": "^2.3.4"
+  }
+}
