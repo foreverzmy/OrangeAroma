@@ -4,11 +4,11 @@ import User from '../../controllers/user.sql';
 import { secretKey } from '../../config';
 
 const router = new Router();
+const user = new User();
 
 router.get('/login', async (ctx, next) => {
   const token = jwt.decode(ctx.request.query.token);
   if (token) {
-    const user = new User();
     const result = await user.findUserById(token._id);
     if (result === null) {
       ctx.status = 401;
@@ -36,8 +36,6 @@ router.get('/login', async (ctx, next) => {
 
 router.post('/login', async (ctx, next) => {
   const { username, password } = ctx.request.body;
-
-  const user = new User();
   const result = await user.findUserByName(username);
   if (result === null) {
     ctx.status = 401;

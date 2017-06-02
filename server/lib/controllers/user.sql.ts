@@ -37,7 +37,8 @@ class User {
     const newUser = new UserDB({
       username: this.username,
       password: this.password,
-      avata: this.avatar
+      avata: this.avatar,
+      salt: this.salt
     })
     let saveUser;
     try {
@@ -70,6 +71,27 @@ class User {
       throw err;
     }
     return user;
+  }
+
+  // 认证用户名和密码
+  async authenticate(obj) {
+    const { username, password } = obj;
+    const user = await this.findUserByName(username);
+    let hashPass;
+    if (user) {
+      try {
+        hashPass = await bcrypt.hash(password, user.salt);
+      } catch (err) {
+        throw err;
+      }
+      if (hashPass === user.password) {
+        return user;
+      } else {
+        return 'worngPass'
+      }
+    } else {
+      return false;
+    }
   }
 
 }

@@ -4,11 +4,10 @@ import User from '../../controllers/user.sql';
 import { secretKey } from '../../config';
 
 const router = new Router();
+const user = new User();
 
 router.post('/register', async (ctx, next) => {
   const { username, password } = ctx.request.body;
-
-  const user = new User();
 
   const result = await user.findUserByName(username);
 
