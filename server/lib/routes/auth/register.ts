@@ -16,13 +16,18 @@ router.post('/register', async (ctx, next) => {
       username: username,
       password: password
     });
-    const token = jwt.sign({ username: username }, secretKey);
+    const date = new Date().getTime();
+    const token = jwt.sign({
+      _id: newUser._id,
+      iat: date, // 签发时间
+      exp: date + 604800000, // 过期时间  
+    }, secretKey);
+
     ctx.status = 200;
+    ctx.set('Authorization', token);
     ctx.body = {
       success: true,
       message: 'register success.',
-      token: token,
-      expires: new Date().getTime() + 604800000,
     }
   } else {
     ctx.status = 401;

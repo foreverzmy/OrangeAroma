@@ -7,7 +7,7 @@ const router = new Router();
 const user = new User();
 
 router.get('/login', async (ctx, next) => {
-  const token = jwt.decode(ctx.request.query.token);
+  const token = jwt.decode(ctx.req.headers.authorization);
   if (token) {
     const result = await user.findUserById(token._id);
     if (result === null) {
@@ -17,11 +17,17 @@ router.get('/login', async (ctx, next) => {
         message: 'login failed.'
       }
     } else {
+      const date = new Date().getTime();
+      const token = jwt.sign({
+        _id: result._id,
+        iat: date, // 签发时间
+        exp: date + 604800000, // 过期时间  
+      }, secretKey);
       ctx.status = 200;
+      ctx.set('Authorization', token);
       ctx.body = {
         success: true,
-        message: 'login success.',
-        expires: new Date().getTime() + 604800000,
+        message: 'login success.'
       }
     }
   } else {
@@ -44,15 +50,20 @@ router.post('/login', async (ctx, next) => {
       message: 'username not exist.'
     }
   } else {
-    const token = jwt.sign({ _id: result._id }, secretKey);
-    console.log(token);
+    const date = new Date().getTime();
+    const token = jwt.sign({
+      _id: result._id,
+      iat: date, // 签发时间
+      exp: date + 604800000, // 过期时间  
+    }, secretKey);
+
     ctx.status = 200;
+    ctx.set('Authorization', token);
     ctx.body = {
       success: true,
-      message: 'login success.',
-      token: token,
-      expires: new Date().getTime() + 604800000,
+      message: 'login success.'
     }
+
   }
   await next();
 })

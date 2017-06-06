@@ -3,6 +3,8 @@ import * as http from 'http';
 import * as Router from 'koa-router';
 import * as bodyparser from 'koa-bodyparser';
 
+import validate from './lib/controllers/validate';
+
 import login from './lib/routes/auth/login';
 import register from './lib/routes/auth/register';
 
@@ -21,6 +23,7 @@ app.use(async (ctx, next) => {
 
 app
   .use(bodyparser())
+  .use(validate)
   .use(router.routes())
   .use(router.allowedMethods())
 
