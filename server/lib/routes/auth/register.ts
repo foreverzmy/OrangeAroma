@@ -39,8 +39,7 @@ router.post('/register', async (ctx, next) => {
     } else {
       ctx.status = 401;
       ctx.body = {
-        success: false,
-        message: 'username already exist.'
+        error: 'username already exist.'
       }
     }
   }
