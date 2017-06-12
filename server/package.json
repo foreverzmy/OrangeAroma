@@ -19,13 +19,15 @@
     "@types/koa-router": "^7.0.22",
     "@types/mongoose": "^4.7.13",
     "@types/mongoose-promise": "^4.5.5",
+    "@types/supertest": "^2.0.0",
     "bcryptjs": "^2.4.3",
     "debug": "^2.6.6",
     "jsonwebtoken": "^7.4.1",
     "koa": "^2.0.0-alpha.8",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.1.1",
-    "mongoose": "^4.10.4"
+    "mongoose": "^4.10.4",
+    "supertest": "^3.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.0.0",

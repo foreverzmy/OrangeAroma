@@ -32,7 +32,7 @@ router.get('/login', async (ctx, next) => {
         exp: date + 604800000, // 过期时间  
       }, secretKey);
       ctx.status = 200;
-      ctx.set('Authorization', token);
+      ctx.set('authorization', token);
       ctx.body = {
         success: true,
         message: 'login success.'

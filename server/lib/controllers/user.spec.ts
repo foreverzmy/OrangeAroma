@@ -1,6 +1,6 @@
+import 'mocha';
 import User from './user.sql';
 import { expect } from 'chai';
-import 'mocha';
 
 
 const user = new User();
