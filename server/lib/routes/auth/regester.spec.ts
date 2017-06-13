@@ -12,12 +12,11 @@ const server = request('http://localhost:9000');
 describe('POST regester with username & password.', () => {
   it('returen a singn', async () => {
     return server
-      .post('/api/auth/login')
+      .post('/api/auth/register')
       .set('Accept', 'application/json')
       .send({ username: 'zkk', password: '123456' })
-      .expect(200, {
-        success: true,
-        message: 'register success.',
+      .expect(401, {
+        error: 'username already exist.'
       })
   })
 })

@@ -1,0 +1,29 @@
+{
+  "/api/*": {
+    "target": "http://localhost:9000/api",
+    "changeOrigin": true,
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": ""
+    }
+  },
+  "/sockjs-node/*": {
+    "target": "http://localhost:9000/sockjs-node",
+    "changeOrigin": true,
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": ""
+    }
+  },
+  "/socket.io/*": {
+    "target": "http://localhost:9000/socket.io",
+    "changeOrigin": true,
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/socket.io": ""
+    }
+  }
+}
