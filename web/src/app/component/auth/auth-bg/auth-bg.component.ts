@@ -3,6 +3,7 @@ import { ViewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
 
 import { Star } from './start';
+import { Boom, getRandom } from './boom';
 
 @Component({
   selector: 'app-auth-bg',
@@ -14,11 +15,11 @@ export class AuthBgComponent implements OnInit {
   public bigbooms = [];
   public octx: CanvasRenderingContext2D;
   public canvas;
-  public ctx;
+  public ctx: CanvasRenderingContext2D;
   public stars = [];
+  public lastTime: number = new Date().getTime();
 
-  constructor(public elementRef: ElementRef) {
-  }
+  constructor(public elementRef: ElementRef) { }
 
   ngOnInit() {
     this.canvas = document.createElement('canvas');
@@ -29,14 +30,15 @@ export class AuthBgComponent implements OnInit {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
     this.initAnimate();
-    this.putValue();
+    this.drawBg();
   }
 
   initAnimate() {
-    this.drawBg();  // 画背景
+    this.animate();
+    requestAnimationFrame(this.initAnimate.bind(this));
   }
 
-  drawBg() {
+  drawBg() { // 画背景
     const maxRadius = 1.5;
     for (let i = 0; i < 100; i++) {
       const r = Math.random() * maxRadius;
@@ -44,20 +46,82 @@ export class AuthBgComponent implements OnInit {
       const y = Math.random() * 2 * this.canvas.height - this.canvas.height;
       const star = new Star(this.ctx, x, y, r);
       this.stars.push(star);
-      star.paint();
     }
   }
 
-  getimgData() {  // 获取canvas数据
-    const imgData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    return imgData;
+  drawMoon() {  // 画出月亮及月晕
+    const centerX = this.canvas.width - 200;
+    const centerY = 100;
+    const diameter = 80;
+    this.ctx.save();
+    this.ctx.beginPath();
+    this.ctx.arc(centerX + diameter / 2, centerY + diameter / 2, diameter / 2, 0, 2 * Math.PI);
+    this.ctx.fillStyle = 'rgba(251,192,76,1)';
+    this.ctx.fill();
+    this.ctx.restore();
+    for (let i = 0; i < 10; i++) {
+      this.ctx.save();
+      this.ctx.beginPath();
+      this.ctx.arc(centerX + diameter / 2, centerY + diameter / 2, diameter / 2 + 2 * i, 0, 2 * Math.PI);
+      this.ctx.fillStyle = 'rgba(240,219,120,0.05)';
+      this.ctx.fill();
+      this.ctx.restore()
+    }
   }
 
-  putValue() {  // 将canvas画在
+  animate() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.save();
+    this.ctx.fillStyle = 'rgba(0,5,24,0.1)';
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.restore();
+
+    const newTime = new Date().getTime();
+    if (newTime - this.lastTime > 500 + (window.innerHeight - 767) / 2) {
+      // const random = Math.random() * 100 > 2 ? true : false;
+      const x = getRandom(this.canvas.width / 5, this.canvas.width * 4 / 5);
+      const y = getRandom(50, 200);
+      // if (random === true) {
+      const bigBoom = new Boom(
+        this.ctx,
+        getRandom(this.canvas.width / 3, this.canvas.width * 2 / 3), 2,
+        '#FFF',
+        this.canvas.height,
+        { x: x, y: y }
+      );
+      this.bigbooms.push(bigBoom);
+      // } else {
+      //   const bigBoom = new Boom(
+      //     this.ctx,
+      //     getRandom(this.canvas.width / 3, this.canvas.width * 2 / 3), 2,
+      //     '#FFF',
+      //     this.canvas.height,
+      //     { x: this.canvas.width / 2, y: 200 }
+      //   )
+      // }
+
+      this.lastTime = newTime;
+    }
+
+    this.stars.forEach(star => {
+      star.paint();
+    });
+
+    this.drawMoon();
+
+    this.bigbooms.forEach(val => {
+      if (val.dead === false) {
+        val.move();
+        val.drawLight();
+      }
+    })
+
+    this.putValue();
+  }
+
+  putValue() {  // 将canvas画在画布上
     this.octx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    const img = new Image();
-    this.octx.drawImage(this.canvas, 0, 0, this.canvas.width, this.canvas.height)
+    this.octx.drawImage(this.canvas, 0, 0, this.canvas.width, this.canvas.height);
   }
 
 }

@@ -1,13 +1,13 @@
 export class Star {
+  public ctx: CanvasRenderingContext2D;
   public x;
   public y;
   public r;
-  public ctx: CanvasRenderingContext2D;
   constructor(ctx, x, y, r) {
+    this.ctx = ctx;
     this.x = x;
     this.y = y;
     this.r = r;
-    this.ctx = ctx;
   }
 
   paint() {
