@@ -70,7 +70,7 @@ export class AuthBgComponent implements OnInit {
   }
 
   animate() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.save();
     this.ctx.fillStyle = 'rgba(0,5,24,0.1)';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -90,15 +90,6 @@ export class AuthBgComponent implements OnInit {
         { x: x, y: y }
       );
       this.bigbooms.push(bigBoom);
-      // } else {
-      //   const bigBoom = new Boom(
-      //     this.ctx,
-      //     getRandom(this.canvas.width / 3, this.canvas.width * 2 / 3), 2,
-      //     '#FFF',
-      //     this.canvas.height,
-      //     { x: this.canvas.width / 2, y: 200 }
-      //   )
-      // }
 
       this.lastTime = newTime;
     }
@@ -110,9 +101,18 @@ export class AuthBgComponent implements OnInit {
     this.drawMoon();
 
     this.bigbooms.forEach(val => {
+      console.log(val.dead)
       if (val.dead === false) {
         val.move();
         val.drawLight();
+      } else {
+        val.booms.forEach((v, i) => {
+          if (v.dead === false) {
+            v.moveTo(i);
+          } else if (i === val.booms.length - 1) {
+            this.bigbooms[this.bigbooms.indexOf(val)] = null;
+          }
+        })
       }
     })
 
